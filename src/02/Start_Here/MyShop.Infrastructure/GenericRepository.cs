@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace MyShop.Infrastructure
 {
     public abstract class GenericRepository<T> : IRepository<T> where T : class
     {
-        private ShoppingContext context;
+        protected ShoppingContext context;
 
         public GenericRepository(ShoppingContext context)
         {
@@ -24,7 +25,7 @@ namespace MyShop.Infrastructure
             return context.Set<T>().ToList();
         }
 
-        public virtual IEnumerable<T> Find(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
             return context.Set<T>()
                 .AsQueryable()
