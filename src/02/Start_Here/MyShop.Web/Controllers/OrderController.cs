@@ -12,25 +12,37 @@ namespace MyShop.Web.Controllers
     public class OrderController : Controller
     {
         private ShoppingContext context;
+        private OrderRepository orderRepository;
+        private ProductRepository productRepository;
+        private CustomerRepository customerRepository;
 
-        public OrderController()
+        public OrderController(OrderRepository orderRepository, 
+            ProductRepository productRepository,
+            CustomerRepository customerRepository)
         {
             context = new ShoppingContext();
+            this.orderRepository = orderRepository;
+            this.productRepository = productRepository;
+            this.customerRepository = customerRepository;
         }
 
         public IActionResult Index()
         {
-            var orders = context.Orders
-                .Include(order => order.LineItems)
-                .ThenInclude(lineItem => lineItem.Product)
-                .Where(order => order.OrderDate > DateTime.UtcNow.AddDays(-1)).ToList();
+            //var orders = context.Orders
+            //    .Include(order => order.LineItems)
+            //    .ThenInclude(lineItem => lineItem.Product)
+            //    .Where(order => order.OrderDate > DateTime.UtcNow.AddDays(-1)).ToList();
+
+            var orders = orderRepository.All()
+                .Where(order => order.OrderDate > DateTime.UtcNow.AddDays(-1)).ToList());
 
             return View(orders);
         }
 
         public IActionResult Create()
         {
-            var products = context.Products.ToList();
+            //var products = context.Products.ToList();
+            var products = productRepository.All();
 
             return View(products);
         }
@@ -50,6 +62,8 @@ namespace MyShop.Web.Controllers
                 PostalCode = model.Customer.PostalCode,
                 Country = model.Customer.Country
             };
+            customerRepository.Add(customer);
+            customerRepository.SaveChanges();
 
             var order = new Order
             {
@@ -60,9 +74,11 @@ namespace MyShop.Web.Controllers
                 Customer = customer
             };
 
-            context.Orders.Add(order);
+            orderRepository.Add(order);
+            orderRepository.SaveChanges();
 
-            context.SaveChanges();
+            //context.Orders.Add(order);
+            //context.SaveChanges();
 
             return Ok("Order Created");
         }
