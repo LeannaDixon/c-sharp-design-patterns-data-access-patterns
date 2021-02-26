@@ -32,6 +32,9 @@ namespace MyShop.Web
             CreateInitialDatabase();
 
             services.AddTransient<ShoppingContext>();
+            services.AddTransient<IRepository<Order>, OrderRepository>();
+            services.AddTransient<IRepository<Product>, ProductRepository>();
+            services.AddTransient<IRepository<Customer>, CustomerRepository>();
        
         }
 

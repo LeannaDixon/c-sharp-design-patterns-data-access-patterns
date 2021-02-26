@@ -11,16 +11,14 @@ namespace MyShop.Web.Controllers
 {
     public class OrderController : Controller
     {
-        private ShoppingContext context;
-        private OrderRepository orderRepository;
-        private ProductRepository productRepository;
-        private CustomerRepository customerRepository;
+        private IRepository<Order> orderRepository;
+        private IRepository<Product> productRepository;
+        private IRepository<Customer> customerRepository;
 
-        public OrderController(OrderRepository orderRepository, 
-            ProductRepository productRepository,
-            CustomerRepository customerRepository)
+        public OrderController(IRepository<Order> orderRepository,
+            IRepository<Product> productRepository,
+            IRepository<Customer> customerRepository)
         {
-            context = new ShoppingContext();
             this.orderRepository = orderRepository;
             this.productRepository = productRepository;
             this.customerRepository = customerRepository;
@@ -28,20 +26,14 @@ namespace MyShop.Web.Controllers
 
         public IActionResult Index()
         {
-            //var orders = context.Orders
-            //    .Include(order => order.LineItems)
-            //    .ThenInclude(lineItem => lineItem.Product)
-            //    .Where(order => order.OrderDate > DateTime.UtcNow.AddDays(-1)).ToList();
-
             var orders = orderRepository.All()
-                .Where(order => order.OrderDate > DateTime.UtcNow.AddDays(-1)).ToList());
+                .Where(order => order.OrderDate > DateTime.UtcNow.AddDays(-1)).ToList();
 
             return View(orders);
         }
 
         public IActionResult Create()
         {
-            //var products = context.Products.ToList();
             var products = productRepository.All();
 
             return View(products);
@@ -76,9 +68,6 @@ namespace MyShop.Web.Controllers
 
             orderRepository.Add(order);
             orderRepository.SaveChanges();
-
-            //context.Orders.Add(order);
-            //context.SaveChanges();
 
             return Ok("Order Created");
         }

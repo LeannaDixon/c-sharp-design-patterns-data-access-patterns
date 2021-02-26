@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MyShop.Infrastructure
 {
-    interface IRepository<T> 
+    public interface IRepository<T> 
     {
         T Add(T entity);
         T Update(T entity);
