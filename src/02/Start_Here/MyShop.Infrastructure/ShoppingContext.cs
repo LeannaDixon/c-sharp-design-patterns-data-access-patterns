@@ -18,5 +18,13 @@ namespace MyShop.Infrastructure
                 // .UseLazyLoadingProxies()
                 .UseSqlite("Data Source=orders.db");
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Customer>()
+                .Ignore(customer => customer.ProfilePicture);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

@@ -16,7 +16,8 @@ namespace MyShop.Infrastructure
         { 
             get
             {
-                return _productRepository == null ? _productRepository = new ProductRepository(_context) : _productRepository;
+                return _productRepository == null ? _productRepository = new ProductRepository(_context) 
+                    : _productRepository;
             }
         }
 
