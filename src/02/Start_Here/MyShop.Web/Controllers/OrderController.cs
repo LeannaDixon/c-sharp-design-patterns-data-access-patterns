@@ -11,22 +11,16 @@ namespace MyShop.Web.Controllers
 {
     public class OrderController : Controller
     {
-        private IRepository<Order> orderRepository;
-        private IRepository<Product> productRepository;
-        private IRepository<Customer> customerRepository;
+        private IUnitOfWork unitOfWork;
 
-        public OrderController(IRepository<Order> orderRepository,
-            IRepository<Product> productRepository,
-            IRepository<Customer> customerRepository)
+        public OrderController(IUnitOfWork unitOfWork)
         {
-            this.orderRepository = orderRepository;
-            this.productRepository = productRepository;
-            this.customerRepository = customerRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            var orders = orderRepository.All()
+            var orders = unitOfWork.OrderRepository.All()
                 .Where(order => order.OrderDate > DateTime.UtcNow.AddDays(-1)).ToList();
 
             return View(orders);
@@ -34,7 +28,7 @@ namespace MyShop.Web.Controllers
 
         public IActionResult Create()
         {
-            var products = productRepository.All();
+            var products = unitOfWork.ProductRepository.All();
 
             return View(products);
         }
@@ -46,28 +40,36 @@ namespace MyShop.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(model.Customer.Name)) return BadRequest("Customer needs a name");
 
-            var customer = new Customer
-            {
-                Name = model.Customer.Name,
-                ShippingAddress = model.Customer.ShippingAddress,
-                City = model.Customer.City,
-                PostalCode = model.Customer.PostalCode,
-                Country = model.Customer.Country
-            };
-            customerRepository.Add(customer);
-            customerRepository.SaveChanges();
-
             var order = new Order
             {
                 LineItems = model.LineItems
                     .Select(line => new LineItem { ProductId = line.ProductId, Quantity = line.Quantity })
                     .ToList(),
-
-                Customer = customer
             };
 
-            orderRepository.Add(order);
-            orderRepository.SaveChanges();
+            var existingCustomer = unitOfWork.CustomerRepository.Find(customer => customer.Name == model.Customer.Name)
+                                                       .FirstOrDefault();
+            if (existingCustomer == null)
+            {
+                var newCustomer = new Customer
+                {
+                    Name = model.Customer.Name,
+                    ShippingAddress = model.Customer.ShippingAddress,
+                    City = model.Customer.City,
+                    PostalCode = model.Customer.PostalCode,
+                    Country = model.Customer.Country
+                };
+                unitOfWork.CustomerRepository.Add(newCustomer);
+                order.Customer = newCustomer;
+            }
+            else
+            {
+                order.Customer = existingCustomer;
+                unitOfWork.CustomerRepository.Update(existingCustomer);
+            }
+
+            unitOfWork.OrderRepository.Add(order);
+            unitOfWork.SaveChanges();
 
             return Ok("Order Created");
         }
