@@ -1,4 +1,5 @@
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using Moq;
 using MyShop.Domain.Models;
 using MyShop.Infrastructure;
@@ -19,20 +20,18 @@ namespace MyShop.Test
         [Test]
         public void CallAddMethod()
         {
-            var sut = new Mock<IRepository<Order>>();
-            var mockedProductRepository = new Mock<IRepository<Product>>();
-            var mockedCustomerRepository = new Mock<IRepository<Customer>>();
+            var fixture = new Fixture()
+                .Customize(new AutoMoqCustomization());
 
-            var orderController = new OrderController(sut.Object, 
-                mockedProductRepository.Object,
-                mockedCustomerRepository.Object);
+            var sut = fixture.Freeze<Mock<IUnitOfWork>>();
+         
+            var orderController = new OrderController(sut.Object);
 
-            var fixture = new Fixture();
+            
             var createOrderModel = fixture.Create<CreateOrderModel>();
 
             orderController.Create(createOrderModel);
-
-            sut.Verify(method => method.Add(It.IsAny<Order>()));
+            sut.Verify(repo => repo.OrderRepository.Add(It.IsAny<Order>()));
         }
     }
 }
