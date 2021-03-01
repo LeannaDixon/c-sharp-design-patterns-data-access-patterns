@@ -4,7 +4,8 @@ namespace MyShop.Domain.Models
 {
     public class Customer
     {
-        private byte[] profilePicture;
+        //private byte[] profilePicture;
+        private Lazy<ProfilePictureService> profilePicture = new Lazy<ProfilePictureService>();
         public Guid CustomerId { get; set; }
 
         public string Name { get; set; }
@@ -21,16 +22,17 @@ namespace MyShop.Domain.Models
                 // CODE SMELL! Now our model needs to know about the ProfilePictureService
                 // We also need to ensure that when the Customer Model is created, the Profile PIcture property
                 // is not tracked. We do this by overriding the OnModelCreation method of the DBContext and ignore this prop.
-                if (profilePicture == null)
-                {
-                    profilePicture = ProfilePictureService.GetFor(Name);
-                }
-                return profilePicture;
+                //if (profilePicture == null)
+                //{
+                //    profilePicture = ProfilePictureService.GetFor(Name);
+                //}
+                //return profilePicture;
+                return profilePicture.Value.GetFor(Name);
             }
-            set 
-            {
-                profilePicture = value;
-            } 
+            //set 
+            //{
+            //    profilePicture = value;
+            //} 
         }
 
         public Customer()

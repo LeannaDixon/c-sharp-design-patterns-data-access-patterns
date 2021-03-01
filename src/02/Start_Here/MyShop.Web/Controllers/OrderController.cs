@@ -49,7 +49,12 @@ namespace MyShop.Web.Controllers
 
             var existingCustomer = unitOfWork.CustomerRepository.Find(customer => customer.Name == model.Customer.Name)
                                                        .FirstOrDefault();
-            if (existingCustomer == null)
+            if (existingCustomer != null)
+            {
+                unitOfWork.CustomerRepository.Update(existingCustomer);
+                order.Customer = existingCustomer;
+            }
+            else
             {
                 var newCustomer = new Customer
                 {
@@ -61,11 +66,6 @@ namespace MyShop.Web.Controllers
                 };
                 unitOfWork.CustomerRepository.Add(newCustomer);
                 order.Customer = newCustomer;
-            }
-            else
-            {
-                order.Customer = existingCustomer;
-                unitOfWork.CustomerRepository.Update(existingCustomer);
             }
 
             unitOfWork.OrderRepository.Add(order);

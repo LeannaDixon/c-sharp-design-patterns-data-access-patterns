@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace MyShop.Domain.Models
@@ -16,6 +17,7 @@ namespace MyShop.Domain.Models
         // SQLite doesn't support DateTimeOffset :(
         public DateTime OrderDate { get; set; }
 
+        [Column(TypeName = "decimal(18,4)")]
         public decimal OrderTotal => LineItems.Sum(item => item.Product.Price * item.Quantity);
 
         public Order()
