@@ -37,5 +37,12 @@ namespace MyShop.Infrastructure
                 .ToList();
         }
 
+        public override IEnumerable<Order> All()
+        {
+            return context.Orders
+                .Include(orders => orders.LineItems)
+                    .ThenInclude(lineItems => lineItems.Product)
+                    .ToList();
+        }
     }
 }

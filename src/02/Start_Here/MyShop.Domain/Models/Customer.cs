@@ -5,7 +5,7 @@ namespace MyShop.Domain.Models
     public class Customer
     {
         //private byte[] profilePicture;
-        private Lazy<ProfilePictureService> profilePicture = new Lazy<ProfilePictureService>();
+        private Lazy<ProfilePictureService> profilePicture = new Lazy<ProfilePictureService>(() => new ProfilePictureService(), true);
         public Guid CustomerId { get; set; }
 
         public string Name { get; set; }

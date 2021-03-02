@@ -9,6 +9,7 @@ using MyShop.Web.Models;
 
 namespace MyShop.Web.Controllers
 {
+    [Controller]
     public class OrderController : Controller
     {
         private IUnitOfWork unitOfWork;
@@ -22,7 +23,10 @@ namespace MyShop.Web.Controllers
         {
             var orders = unitOfWork.OrderRepository.All()
                 .Where(order => order.OrderDate > DateTime.UtcNow.AddDays(-1)).ToList();
-
+            if (orders.Count <= 0)
+            {
+                return Redirect("Order/Create");
+            }
             return View(orders);
         }
 
