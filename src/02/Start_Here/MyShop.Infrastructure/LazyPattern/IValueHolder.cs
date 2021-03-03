@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyShop.Domain.LazyPattern
+namespace MyShop.Infrastructure.LazyPattern
 {
     public interface IValueHolder<T>
     {

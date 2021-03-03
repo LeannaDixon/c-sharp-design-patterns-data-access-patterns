@@ -1,5 +1,4 @@
-﻿using MyShop.Domain.LazyPattern;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyShop.Domain.Models
@@ -9,25 +8,25 @@ namespace MyShop.Domain.Models
         //private byte[] profilePicture;
 
         //WHY PUBLIU?
-        public Lazy<byte[]> ProfilePictureValueHolder { get; set; }
+        //public Lazy<byte[]> ProfilePictureValueHolder { get; set; }
         public Guid CustomerId { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
         [Required]
-        public string ShippingAddress { get; set; }
+        public virtual string ShippingAddress { get; set; }
 
         [Required]
-        public string City { get; set; }
+        public virtual string City { get; set; }
         [Required]
-        public string PostalCode { get; set; }
+        public virtual string PostalCode { get; set; }
 #nullable enable
-        public string Country { get; set; }
+        public virtual string Country { get; set; }
 #nullable disable
-        public byte[] ProfilePicture 
-        { 
-            get
-            {
+        public virtual byte[] ProfilePicture { get; set; }
+        //{ 
+            //get
+            //{
                 // *****************  LAZY INITIALISATION ****************************
                 // CODE SMELL! Now our model needs to know about the ProfilePictureService
                 // We also need to ensure that when the Customer Model is created, the Profile PIcture property
@@ -41,13 +40,13 @@ namespace MyShop.Domain.Models
 
                 //***** Now the Repo will inject the correct ValueLoader into the ctror.
                 // ***** Separaion of concerns, now the model does not know about the service.
-                return ProfilePictureValueHolder.Value;
-            }
+                //return ProfilePictureValueHolder.Value;
+           // }
             //set 
             //{
             //    profilePicture = value;
             //} 
-        }
+        //}
 
         public Customer()
         {

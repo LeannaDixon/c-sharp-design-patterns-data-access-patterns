@@ -31,8 +31,8 @@ namespace MyShop.Infrastructure
             modelBuilder.Entity<Customer>()
                 .Ignore(customer => customer.ProfilePicture);
 
-            modelBuilder.Entity<Customer>()
-                .Ignore(customer => customer.ProfilePictureValueHolder);
+            //modelBuilder.Entity<Customer>()
+            //    .Ignore(customer => customer.ProfilePictureValueHolder);
 
             modelBuilder.Entity<Product>()
                 .HasData(
