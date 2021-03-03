@@ -1,7 +1,9 @@
-﻿using MyShop.Domain.Models;
+﻿using MyShop.Domain.LazyPattern;
+using MyShop.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace MyShop.Infrastructure
@@ -10,6 +12,33 @@ namespace MyShop.Infrastructure
     {
         public CustomerRepository(ShoppingContext context) : base(context)
         {
+        }
+
+        public override Customer Add(Customer entity)
+        {
+            return base.Add(entity);
+        }
+
+        public override IEnumerable<Customer> All()
+        {
+            return base.All().Select(customer =>
+            {
+                customer.ProfilePictureValueHolder = new ValueHolder<byte[]>((parameter) =>
+                {
+                    return ProfilePictureService.GetFor(parameter.ToString());
+                });
+                return customer;
+            });
+        }
+
+        public override IEnumerable<Customer> Find(Expression<Func<Customer, bool>> predicate)
+        {
+            return base.Find(predicate);
+        }
+
+        public override Customer Get(Guid id)
+        {
+            return base.Get(id);
         }
 
         public override Customer Update(Customer customerToUpdate)

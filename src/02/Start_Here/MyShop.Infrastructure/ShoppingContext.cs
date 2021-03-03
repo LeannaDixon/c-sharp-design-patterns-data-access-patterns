@@ -27,15 +27,8 @@ namespace MyShop.Infrastructure
             modelBuilder.Entity<Customer>()
                 .Ignore(customer => customer.ProfilePicture);
 
-            //modelBuilder.Entity<Product>()
-            //    .HasData(new Product[]
-            //    {
-            //        new Product { Name = "Canon EOS 70D", Price = 599m },
-            //        new Product { Name = "Shure SM7B", Price = 245m },
-            //        new Product { Name = "Key Light", Price = 59.99m },
-            //        new Product { Name = "Android Phone", Price = 259.59m },
-            //        new Product { Name = "5.1 Speaker System", Price = 799.99m }
-            //    });
+            modelBuilder.Entity<Customer>()
+                .Ignore(customer => customer.ProfilePictureValueHolder);
 
             modelBuilder.Entity<Product>()
                 .HasData(
@@ -45,6 +38,7 @@ namespace MyShop.Infrastructure
                     new Product { Name = "Android Phone", Price = 259.59m },
                     new Product { Name = "5.1 Speaker System", Price = 799.99m }
                 );
+
             base.OnModelCreating(modelBuilder);
         }
     }

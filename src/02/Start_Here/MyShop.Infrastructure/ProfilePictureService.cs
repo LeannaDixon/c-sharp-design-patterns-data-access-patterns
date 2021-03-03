@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 
 // We want this moved to the Infrastructure project!
-namespace MyShop.Domain
+namespace MyShop.Infrastructure
 {
-    public class ProfilePictureService
+    public static class ProfilePictureService
     {
         // Should be async when doing an API call
-        public byte[] GetFor(string lookup)
+        public static byte[] GetFor(string lookup)
         {
             // Fetch from some 3rd party API based on the e-mail or name
 

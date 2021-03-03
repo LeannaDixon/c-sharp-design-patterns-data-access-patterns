@@ -1,11 +1,14 @@
-﻿using System;
+﻿using MyShop.Domain.LazyPattern;
+using System;
 
 namespace MyShop.Domain.Models
 {
     public class Customer
     {
         //private byte[] profilePicture;
-        private Lazy<ProfilePictureService> profilePicture = new Lazy<ProfilePictureService>(() => new ProfilePictureService(), true);
+
+        //WHY PUBLIU?
+        public IValueHolder<byte[]> ProfilePictureValueHolder { get; set; }
         public Guid CustomerId { get; set; }
 
         public string Name { get; set; }
@@ -27,7 +30,8 @@ namespace MyShop.Domain.Models
                 //    profilePicture = ProfilePictureService.GetFor(Name);
                 //}
                 //return profilePicture;
-                return profilePicture.Value.GetFor(Name);
+                //return profilePicture.Value.GetFor(Name);
+                return ProfilePictureValueHolder.GetValue(Name);
             }
             //set 
             //{
