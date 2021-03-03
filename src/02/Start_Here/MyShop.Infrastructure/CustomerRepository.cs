@@ -22,10 +22,13 @@ namespace MyShop.Infrastructure
         public override IEnumerable<Customer> All()
         {
             return base.All().Select(customer =>
+           //return context.Customers.Select(customer =>
             {
-                customer.ProfilePictureValueHolder = new ValueHolder<byte[]>((parameter) =>
+                // ***********For every customer loaded,
+                // we initialise the ValueHolder and pass in the fucntion.
+                customer.ProfilePictureValueHolder = new Lazy<byte[]>(() =>
                 {
-                    return ProfilePictureService.GetFor(parameter.ToString());
+                    return ProfilePictureService.GetFor(customer.Name.ToString());
                 });
                 return customer;
             });
@@ -33,12 +36,26 @@ namespace MyShop.Infrastructure
 
         public override IEnumerable<Customer> Find(Expression<Func<Customer, bool>> predicate)
         {
-            return base.Find(predicate);
+            return base.
+                Find(predicate)
+                .Select(customer =>
+                {
+                    customer.ProfilePictureValueHolder = new Lazy<byte[]>(() =>
+                    {
+                          return ProfilePictureService.GetFor(customer.Name.ToString());
+                    });
+                    return customer;
+                });
         }
 
         public override Customer Get(Guid id)
         {
-            return base.Get(id);
+            var customer = base.Get(id);
+            customer.ProfilePictureValueHolder = new Lazy<byte[]>(() =>
+            {
+                return ProfilePictureService.GetFor(customer.Name.ToString());
+            });
+            return customer;
         }
 
         public override Customer Update(Customer customerToUpdate)

@@ -22,7 +22,9 @@ namespace MyShop.Infrastructure
 
         public virtual IEnumerable<T> All()
         {
-            return context.Set<T>().ToList();
+            return context.Set<T>()
+                .AsQueryable()
+                .ToList();
         }
 
         public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)

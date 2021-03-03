@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyShop.Infrastructure;
 
 namespace MyShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ShoppingContext))]
-    partial class ShoppingContextModelSnapshot : ModelSnapshot
+    [Migration("20210303162240_AddValueHolder")]
+    partial class AddValueHolder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +32,6 @@ namespace MyShop.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -38,11 +39,9 @@ namespace MyShop.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShippingAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CustomerId");
@@ -112,31 +111,31 @@ namespace MyShop.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("d76e68d3-7980-4ad9-b438-c38fbdf1a897"),
+                            ProductId = new Guid("ba377c1b-0eb1-413e-905b-95226fbb5e0f"),
                             Name = "Canon EOS 70D",
                             Price = 599m
                         },
                         new
                         {
-                            ProductId = new Guid("2e911ce3-47f6-4ef9-980d-27e2d6be4c93"),
+                            ProductId = new Guid("0a402a50-9447-4b31-b863-62e39ff3075a"),
                             Name = "Shure SM7B",
                             Price = 245m
                         },
                         new
                         {
-                            ProductId = new Guid("478b2636-bbf5-4442-809a-e7585cdb78e5"),
+                            ProductId = new Guid("24bfdb57-248b-4e42-a776-9f7d527f614f"),
                             Name = "Key Light",
                             Price = 59.99m
                         },
                         new
                         {
-                            ProductId = new Guid("dc1a905d-dc0e-49d1-8250-63833da481c1"),
+                            ProductId = new Guid("e6f62f39-0f74-4f79-9630-a7e8d942a6f5"),
                             Name = "Android Phone",
                             Price = 259.59m
                         },
                         new
                         {
-                            ProductId = new Guid("4046babb-57ba-4cfe-8717-fbd88a6004b5"),
+                            ProductId = new Guid("d2005bd1-ccd4-4c23-b9cf-4afaca14babb"),
                             Name = "5.1 Speaker System",
                             Price = 799.99m
                         });

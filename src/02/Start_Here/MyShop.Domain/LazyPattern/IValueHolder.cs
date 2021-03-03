@@ -20,11 +20,13 @@ namespace MyShop.Domain.LazyPattern
         }
 
         // ******Exposed to whoever is calling this.
+        // Lazily initialised the 'value' field if it is not set already.
         public T GetValue(object parameter)
         {
-            // ******Value loader that loads the value for the parameter we pass in.
             if (value == null)
             {
+                // ******Value loader that loads the value for the parameter we pass in.
+                // Sets the 'value' using a function that takes in a parameter and returns a value, based on the supplied parameter.
                 value = getValue(parameter);
             }
             return value;

@@ -14,6 +14,10 @@ namespace MyShop.Infrastructure
         {
 
         }
+        public ShoppingContext()
+        {
+
+        }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

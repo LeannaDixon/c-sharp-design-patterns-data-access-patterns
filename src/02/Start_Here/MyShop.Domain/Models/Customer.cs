@@ -1,5 +1,6 @@
 ﻿using MyShop.Domain.LazyPattern;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyShop.Domain.Models
 {
@@ -8,15 +9,21 @@ namespace MyShop.Domain.Models
         //private byte[] profilePicture;
 
         //WHY PUBLIU?
-        public IValueHolder<byte[]> ProfilePictureValueHolder { get; set; }
+        public Lazy<byte[]> ProfilePictureValueHolder { get; set; }
         public Guid CustomerId { get; set; }
 
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string ShippingAddress { get; set; }
-        public string City { get; set; }
-        public string PostalCode { get; set; }
-        public string Country { get; set; }
 
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string PostalCode { get; set; }
+#nullable enable
+        public string Country { get; set; }
+#nullable disable
         public byte[] ProfilePicture 
         { 
             get
@@ -31,7 +38,10 @@ namespace MyShop.Domain.Models
                 //}
                 //return profilePicture;
                 //return profilePicture.Value.GetFor(Name);
-                return ProfilePictureValueHolder.GetValue(Name);
+
+                //***** Now the Repo will inject the correct ValueLoader into the ctror.
+                // ***** Separaion of concerns, now the model does not know about the service.
+                return ProfilePictureValueHolder.Value;
             }
             //set 
             //{
