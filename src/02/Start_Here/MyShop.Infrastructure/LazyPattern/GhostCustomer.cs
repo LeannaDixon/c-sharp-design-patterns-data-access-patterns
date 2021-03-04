@@ -41,6 +41,7 @@ namespace MyShop.Infrastructure.LazyPattern
             {
                 status = LoadStatus.LOADING;
                 var customer = _load();
+
                 base.Name = customer.Name;
                 base.ShippingAddress = customer.ShippingAddress;
                 base.City = customer.City;
@@ -49,7 +50,6 @@ namespace MyShop.Infrastructure.LazyPattern
             }
             status = LoadStatus.LOADED;
         }
-
     }
 
     enum LoadStatus { GHOST = 0, LOADING = 1, LOADED =2};
