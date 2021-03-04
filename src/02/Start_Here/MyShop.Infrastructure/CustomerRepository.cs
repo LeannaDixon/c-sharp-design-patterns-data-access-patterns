@@ -52,7 +52,16 @@ namespace MyShop.Infrastructure
 
         public override Customer Get(Guid id)
         {
-             return MapToProxy(base.Get(id));
+            var customerId = context.Customers
+                .Where(customer => customer.CustomerId == id)
+                .Select(customer => customer.CustomerId)
+                .Single();
+
+            return new GhostCustomer(() => base.Get(id))
+            {
+                CustomerId = customerId
+            };
+             //return MapToProxy(base.Get(id));
             
             //var customer = base.Get(id)
             //customer.ProfilePictureValueHolder = new Lazy<byte[]>(() =>
